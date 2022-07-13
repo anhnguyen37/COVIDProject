@@ -47,6 +47,10 @@ SELECT location, SUM(CONVERT (BIGINT,new_deaths)) AS total_deaths
 
 
 -- Global Vaccinations
+
+
+-- After running the queries and double checking the numbers from a few countries, I reallized the numbers were inaccurate. There seems to be a lot of missing data for fully vaccinated people.
+-- The following queries were not used in the final Tableau visualization. 
 -- Showing total population, number of people that are fully vaccinated, and the percent of the population that has been vaccinated
 WITH vaccinations (location, population, current_people_vaccinated)
 AS 

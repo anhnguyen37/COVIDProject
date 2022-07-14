@@ -47,10 +47,6 @@ SELECT location, SUM(CONVERT (BIGINT,new_deaths)) AS total_deaths
 
 
 -- Global Vaccinations
-
-
--- After running the queries and double checking the numbers from a few countries, I reallized the numbers were inaccurate. There seems to be a lot of missing data for fully vaccinated people.
--- The following queries were not used in the final Tableau visualization. 
 -- Showing total population, number of people that are fully vaccinated, and the percent of the population that has been vaccinated
 WITH vaccinations (location, population, current_people_vaccinated)
 AS 
@@ -66,7 +62,7 @@ SELECT SUM(population) AS population, SUM(current_people_vaccinated) AS total_va
 
 
 -- Percent of people fully vaccinated by country 
-SELECT location, population, MAX(people_fully_vaccinated) AS vaccination_count, (MAX(people_fully_vaccinated)/population)*100 AS percent_vaccinated
+SELECT location, population, MAX(CAST(people_fully_vaccinated AS BIGINT)) AS people_vaccinated, (MAX(CAST(people_fully_vaccinated AS BIGINT))/population)*100 AS percent_vaccinated
 	FROM portfolio_covid_project..covid_data
 		WHERE continent IS NOT NULL 
 			GROUP BY location, population
@@ -74,17 +70,16 @@ SELECT location, population, MAX(people_fully_vaccinated) AS vaccination_count, 
 
 
 -- Percent of people fully vaccinated by country and date
-SELECT location, population, date, people_fully_vaccinated, (people_fully_vaccinated/population)*100 AS percent_vaccinated
+SELECT location, population, date, CAST(people_fully_vaccinated AS BIGINT) AS people_vaccinated, (CAST(people_fully_vaccinated AS BIGINT)/population)*100 AS percent_vaccinated
 	FROM portfolio_covid_project..covid_data
 		WHERE continent IS NOT NULL 
 			ORDER BY location, date
 
 
 -- Vaccinations grouped by continent
-SELECT TOP 6 location, date, people_fully_vaccinated
+SELECT TOP 6 location, date, CAST(people_fully_vaccinated AS BIGINT) AS people_vaccinated
 	FROM portfolio_covid_project..covid_data
 		WHERE continent IS NULL	
 			AND location NOT IN('World', 'European Union', 'International', 'Low income', 'Lower middle income', 'High income', 'Upper middle income')
 				ORDER BY date DESC, location
 				
-		
